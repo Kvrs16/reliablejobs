@@ -1,0 +1,5 @@
+{
+  "type": "CSV_SUMMARY",
+  "input": { "rows": 100, "seed": 42 },
+  "retryLimit": 2
+}

@@ -1,0 +1,11 @@
+{
+  "type": "RECORD_VALIDATION",
+  "input": {
+    "records": [
+      { "name": "Synthetic Alice", "email": "alice@example.test", "age": 28 },
+      { "name": "", "email": "invalid", "age": -4 },
+      { "name": "Synthetic Bob", "email": "bob@example.test", "age": 200 }
+    ]
+  },
+  "retryLimit": 1
+}

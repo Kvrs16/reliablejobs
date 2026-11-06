@@ -1,0 +1,63 @@
+server:
+  address: 127.0.0.1
+  port: 8080
+  shutdown: graceful
+  max-http-request-header-size: 8KB
+  tomcat:
+    max-http-form-post-size: 8KB
+    connection-timeout: 5s
+    connection-upload-timeout: 5s
+    disable-upload-timeout: false
+  servlet:
+    session:
+      timeout: 20m
+      cookie:
+        http-only: true
+        same-site: strict
+        secure: ${COOKIE_SECURE:false}
+spring:
+  application:
+    name: reliablejobs
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/reliablejobs}
+    username: ${DB_USER:reliablejobs}
+    password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 8
+      connection-timeout: 5000
+      connection-init-sql: "SET statement_timeout = '5s'; SET lock_timeout = '3s'"
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate.jdbc.time_zone: UTC
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
+      accept-float-as-int: false
+      fail-on-trailing-tokens: true
+  mvc:
+    problemdetails:
+      enabled: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics
+  endpoint:
+    health:
+      show-details: never
+logging:
+  level:
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+    org.springframework.jdbc: INFO
+    org.hibernate: WARN
+  structured:
+    format:
+      console: logstash
+reliablejobs:
+  worker:
+    enabled: true
+    poll-ms: 500

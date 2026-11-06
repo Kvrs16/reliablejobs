@@ -1,0 +1,7 @@
+target/
+.idea/
+.env
+*.log
+.tools/
+.local/
+*.cookies

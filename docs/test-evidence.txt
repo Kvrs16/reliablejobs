@@ -1,0 +1,19 @@
+ReliableJobs delivery verification
+Date/timezone: 2026-11-07, Asia/Calcutta
+Environment: Windows amd64, Java 21.0.1, Maven 3.9.11, PostgreSQL 18.6
+Command: .\mvnw.cmd -B verify
+
+Surefire: JobProcessorTest
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
+
+Failsafe: ReliableJobsIT
+Tests run: 21, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 54.39 s
+
+Total: 25 tests, 0 failures, 0 errors, 0 skipped
+BUILD SUCCESS
+Maven Total time: 01:19 min
+Finished at: 2026-11-07T03:29:11+05:30
+
+Executable jar: target/reliablejobs-1.0.0.jar
+Full raw reports (not committed): target/surefire-reports and target/failsafe-reports
+These are verification durations, not API latency or throughput measurements.
