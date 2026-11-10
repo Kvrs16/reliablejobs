@@ -1,5 +1,7 @@
 # Verification and known limitations
 
+Password-reset follow-up verification (2026-11-07): `test failsafe:integration-test failsafe:verify` passed 26 tests (4 unit, 22 PostgreSQL integration), with zero failures/errors/skips. The added test verifies that reset preserves user ID, role and existing job ownership, rejects the old login password, and accepts the new password. Total Maven time was 1m 39s. Jar repackaging must be run after stopping the application: Windows prevented replacement of the jar while it was open. The original full-package delivery results are recorded below.
+
 Verified locally on 2026-11-07 (Asia/Calcutta), Windows amd64, Java 21.0.1, Maven Wrapper 3.9.11, Spring Boot 4.1.2 and native PostgreSQL 18.6. No H2 database, Docker daemon, paid service or existing application database was used.
 
 Command from the repository root:

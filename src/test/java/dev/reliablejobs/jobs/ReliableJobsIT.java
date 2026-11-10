@@ -131,6 +131,33 @@ class ReliableJobsIT {
     return new JobRequest(JobRequest.Type.CSV_SUMMARY, new JobRequest.Input(20, 42, null), retries);
   }
 
+  @Test
+  void passwordResetPreservesOwnerAndJobsAndChangesLogin() throws Exception {
+    UUID jobId = submit(0);
+    AppUser before = users.findByUsername("alice").orElseThrow();
+    String replacement = UUID.randomUUID().toString();
+    String hash = encoder.encode(replacement);
+    assertThat(users.resetPasswordHash("alice", hash)).isEqualTo(1);
+    AppUser after = users.findByUsername("alice").orElseThrow();
+    assertThat(after.getId()).isEqualTo(before.getId());
+    assertThat(after.getRole()).isEqualTo(before.getRole());
+    assertThat(encoder.matches(replacement, after.getPasswordHash())).isTrue();
+    assertThat(service.get(jobId, "alice").id()).isEqualTo(jobId);
+    mvc.perform(
+            post("/api/auth/login")
+                .with(csrf())
+                .param("username", "alice")
+                .param("password", PASSWORD))
+        .andExpect(status().isUnauthorized());
+    mvc.perform(
+            post("/api/auth/login")
+                .with(csrf())
+                .param("username", "alice")
+                .param("password", replacement))
+        .andExpect(status().isNoContent());
+    assertThat(users.resetPasswordHash("missing-user", hash)).isZero();
+  }
+
   UUID submit(int retries) {
     return service.submit("alice", UUID.randomUUID().toString(), csv(retries)).job().id();
   }

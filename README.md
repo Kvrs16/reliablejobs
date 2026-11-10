@@ -2,6 +2,8 @@
 
 A personal Java 21 / Spring Boot modular monolith for submitting bounded background jobs, inspecting attempts, retrieving owner-authorized results, and requesting cancellation or retry. PostgreSQL is the durable queue. There is no frontend, message broker, cloud service, or paid API.
 
+**Using this project on your Windows computer? Start with [Windows setup: exact steps for V:\\reliablejobs](docs/WINDOWS-SETUP.md).** It explains installation, passwords, commands, terminal windows, and expected output in order.
+
 ## Requirements
 
 - A maintained Java 21 JDK (for example free Eclipse Temurin) and Git.

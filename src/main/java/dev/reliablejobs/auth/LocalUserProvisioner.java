@@ -33,6 +33,7 @@ public class LocalUserProvisioner implements ApplicationRunner {
   public void run(ApplicationArguments args) {
     String username = env.getRequiredProperty("provision.username");
     String role = env.getProperty("provision.role", "USER");
+    boolean reset = env.getProperty("provision.reset-password", Boolean.class, false);
     if (!username.matches("[a-zA-Z0-9_.-]{3,64}") || !role.matches("USER|ADMIN"))
       throw new IllegalArgumentException("Invalid username or role");
     Console console = System.console();
@@ -46,8 +47,17 @@ public class LocalUserProvisioner implements ApplicationRunner {
           || new String(secret).getBytes(java.nio.charset.StandardCharsets.UTF_8).length > 72)
         throw new IllegalArgumentException(
             "Password must be 12-64 characters and at most 72 UTF-8 bytes");
-      users.saveAndFlush(new AppUser(username, encoder.encode(new String(secret)), role));
-      console.printf("User created.%n");
+      String hash = encoder.encode(new String(secret));
+      if (reset) {
+        if (users.resetPasswordHash(username, hash) != 1)
+          throw new IllegalArgumentException(
+              "User not found; create the user without the reset flag");
+        console.printf(
+            "Password reset. Restart the application to invalidate existing sessions.%n");
+      } else {
+        users.saveAndFlush(new AppUser(username, hash, role));
+        console.printf("User created.%n");
+      }
     } finally {
       if (secret != null) Arrays.fill(secret, '\0');
     }
